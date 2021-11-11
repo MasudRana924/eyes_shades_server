@@ -33,11 +33,37 @@ async function run() {
             const query = { _id: ObjectId(id) }
             const product = await glassesCollection.findOne(query)
             res.json(product)
-        })  
+        }) 
+        // get api for all data 
+        app.get('/products', async (req, res) => {
+            const cursor = glassesCollection.find({})
+            const page = req.query.page
+            const size = parseInt(req.query.size)
+            let products;
+            const count = await cursor.count()
+            if (page) {
+                products = await cursor.skip(page * size).limit(size).toArray()
+            }
+            else {
+                const products = await cursor.toArray()
+            }
+            res.send({
+                count, products
+            })
+        })   
         app.post('/orders', async (req, res) => {
             const order = req.body
             const result = await ordersCollection.insertOne(order)
             res.json(result)
+        })
+        app.get('/myorders',async(req,res)=>{
+            const email=req.query.email
+            const query={email:email}
+            
+            const cursor = ordersCollection.find(query)
+            const orders = await cursor.toArray()
+            res.send(orders)
+
         })
            
 
