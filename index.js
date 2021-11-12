@@ -20,12 +20,17 @@ async function run() {
         const glassesCollection = database.collection('glasses')
         // order connection
         const ordersCollection = database.collection('orders')
+        // user connection
+        const usersCollection = database.collection('users')
+
+        //  Data section
+
         // get api for all data 
          app.get('/glasses', async (req, res) => {
             const cursor = glassesCollection.find({})
             const glasses = await cursor.toArray()
             res.send(glasses)
-            console.log('data')
+            
         })
         //    get single data 
         app.get('/glass/:id', async (req, res) => {
@@ -50,7 +55,12 @@ async function run() {
             res.send({
                 count, products
             })
-        })   
+        }) 
+        
+        
+        // orders api section 
+
+        // orders post 
         app.post('/orders', async (req, res) => {
             const order = req.body
             const result = await ordersCollection.insertOne(order)
@@ -65,6 +75,27 @@ async function run() {
             res.send(orders)
 
         })
+
+        // USers section 
+
+
+         // post user 
+         app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.json(result)
+        })
+        // make admin 
+         app.put('/users/admin', async (req, res) => {
+            const user = req.body;
+
+            const filter = { email: user.email };
+            const updateDoc = { $set: { role: 'admin' } };
+            const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        })
+
+
            
 
     }
