@@ -24,7 +24,6 @@ async function run() {
         const usersCollection = database.collection('users')
 
         //  Data section
-
         // get api for all data 
          app.get('/glasses', async (req, res) => {
             const cursor = glassesCollection.find({})
@@ -56,10 +55,8 @@ async function run() {
                 count, products
             })
         }) 
-        
-        
+          
         // orders api section 
-
         // orders post 
         app.post('/orders', async (req, res) => {
             const order = req.body
@@ -68,17 +65,14 @@ async function run() {
         })
         app.get('/myorders',async(req,res)=>{
             const email=req.query.email
-            const query={email:email}
-            
+            const query={email:email}   
             const cursor = ordersCollection.find(query)
             const orders = await cursor.toArray()
             res.send(orders)
 
         })
 
-        // USers section 
-
-
+        // Users section 
          // post user 
          app.post('/users', async (req, res) => {
             const user = req.body;
@@ -88,7 +82,6 @@ async function run() {
         // make admin 
          app.put('/users/admin', async (req, res) => {
             const user = req.body;
-
             const filter = { email: user.email };
             const updateDoc = { $set: { role: 'admin' } };
             const result = await usersCollection.updateOne(filter, updateDoc);
@@ -114,9 +107,7 @@ async function run() {
 
     }
 }
-
 run().catch(console.dir)
-
 app.get('/', (req, res) => {
     res.send('eyes_Shades is running under server')
 })
