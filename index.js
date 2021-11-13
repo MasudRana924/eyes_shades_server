@@ -84,6 +84,21 @@ async function run() {
             res.send(orders)
 
         })
+        // update orders
+         // update api 
+         app.put('/updateorders/:id',async(req,res)=>{
+            const id=req.params.id 
+            const updatedStatus=req.body
+            const filter={_id:ObjectId(id)}
+            const option={upsert:true}
+            const updateDoc={
+                $set:{
+                status:'Approved',  
+                }
+            }
+            const result =await ordersCollection.updateOne(filter,updateDoc,true)
+            res.json(result)
+        })
 
         // Users section 
         // post user 
