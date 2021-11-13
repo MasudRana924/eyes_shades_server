@@ -15,6 +15,7 @@ This project was bootstrapped with react and mongodb
 - manage orders
 - manage products
 - make admin 
+- ad product
 
 ### Live site link 
 https://eyesshades-5f891.web.app/
