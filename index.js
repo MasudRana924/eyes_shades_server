@@ -63,6 +63,11 @@ async function run() {
             const result = await ordersCollection.insertOne(order)
             res.json(result)
         })
+        app.get('/getorders', async (req, res) => {
+            const cursor = ordersCollection.find({})
+            const orders = await cursor.toArray()
+            res.send(orders)
+        })
         app.get('/myorders', async (req, res) => {
             const email = req.query.email
             const query = { email: email }
@@ -102,9 +107,6 @@ async function run() {
         app.post('/glasses', async (req, res) => {
             const newGlass = req.body
             const result = await glassesCollection.insertOne(newGlass)
-            console.log('got new user  ', req.body)
-            console.log('added user', result)
-            // res.send('hit the post')
             res.json(result)
         })
         //   delete api 
@@ -114,8 +116,15 @@ async function run() {
             const result = await ordersCollection.deleteOne(query)
             res.json(result)
         })
-        // post product glasses
 
+
+        // delete product glasses
+        app.delete('/glasses/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await glassesCollection.deleteOne(query)
+            res.json(result)
+        })
 
 
     }
