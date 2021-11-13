@@ -22,6 +22,8 @@ async function run() {
         const ordersCollection = database.collection('orders')
         // user connection
         const usersCollection = database.collection('users')
+        // review collections 
+        const reviewsCollection = database.collection('reviews')
 
         //  Data section
         // get api for all data 
@@ -30,6 +32,12 @@ async function run() {
             const glasses = await cursor.toArray()
             res.send(glasses)
 
+        })
+        //    post api 
+        app.post('/glasses', async (req, res) => {
+            const newGlass = req.body
+            const result = await glassesCollection.insertOne(newGlass)
+            res.json(result)
         })
         //    get single data 
         app.get('/glass/:id', async (req, res) => {
@@ -103,12 +111,19 @@ async function run() {
             }
             res.json({ admin: isAdmin });
         })
+        //   reviews 
         //    post api 
-        app.post('/glasses', async (req, res) => {
-            const newGlass = req.body
-            const result = await glassesCollection.insertOne(newGlass)
+        app.post('/reviews', async (req, res) => {
+            const newReview = req.body
+            const result = await reviewsCollection.insertOne(newReview)
             res.json(result)
         })
+        app.get('/getreviews', async (req, res) => {
+            const cursor = reviewsCollection.find({})
+            const reviews = await cursor.toArray()
+            res.send(reviews)
+        })
+
         //   delete api 
         app.delete('/myorders/:id', async (req, res) => {
             const id = req.params.id
@@ -116,7 +131,6 @@ async function run() {
             const result = await ordersCollection.deleteOne(query)
             res.json(result)
         })
-
 
         // delete product glasses
         app.delete('/glasses/:id', async (req, res) => {
