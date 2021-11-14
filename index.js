@@ -154,6 +154,26 @@ async function run() {
             const result = await glassesCollection.deleteOne(query)
             res.json(result)
         })
+        // update product
+        app.put('/updateproduct/:id',async(req,res)=>{
+            const id=req.params.id 
+            const updatedProduct=req.body
+            const filter={_id:ObjectId(id)}
+            const option={upsert:true}
+            const updateDoc={
+                $set:{
+                 name:updatedProduct.name,
+                 price:updatedProduct.price,
+                 sale:updatedProduct.sale,
+                 stock:updatedProduct.stock,
+                 img:updatedProduct.img,
+                 desc:updatedProduct.desc,
+                 star:updatedProduct.star
+                }
+            }
+            const result =await glassesCollection.updateOne(filter,updateDoc,true)
+            res.json(result)
+        })
 
 
     }
